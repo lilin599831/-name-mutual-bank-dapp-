@@ -6,4 +6,6 @@ interface Window {
     removeListener: (eventName: string, handler: (...args: any[]) => void) => void;
     removeAllListeners: (eventName?: string) => void;
   };
+  tronWeb?: any;
+  tronLink?: any;
 } 

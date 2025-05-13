@@ -1,107 +1,108 @@
 import React from 'react';
-import { HashRouter } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 import { Web3Provider } from './contexts/Web3Context';
 import { TransactionProvider } from './contexts/TransactionContext';
 import { NotificationProvider } from './contexts/NotificationContext';
-import { AppRoutes } from './routes';
-import { Header } from './components/Header';
+import { LanguageProvider } from './contexts/LanguageContext';
 import { TransactionModal } from './components/TransactionModal';
 import { useTransaction } from './contexts/TransactionContext';
+import { AppRoutes } from './routes';
+import { Header } from './components/Header';
+import { BottomNav } from './components/BottomNav';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const ToastStyles = createGlobalStyle`
-  :root {
-    --toastify-color-light: rgba(255, 255, 255, 0.1);
-    --toastify-color-dark: rgba(255, 255, 255, 0.1);
-    --toastify-color-info: rgba(52, 152, 219, 0.1);
-    --toastify-color-success: rgba(46, 204, 113, 0.1);
-    --toastify-color-warning: rgba(241, 196, 15, 0.1);
-    --toastify-color-error: rgba(231, 76, 60, 0.1);
-    --toastify-text-color-light: #fff;
-    --toastify-text-color-dark: #fff;
-    --toastify-background-color-light: rgba(255, 255, 255, 0.1);
-    --toastify-background-color-dark: rgba(255, 255, 255, 0.1);
-    --toastify-background-color-info: rgba(52, 152, 219, 0.1);
-    --toastify-background-color-success: rgba(46, 204, 113, 0.1);
-    --toastify-background-color-warning: rgba(241, 196, 15, 0.1);
-    --toastify-background-color-error: rgba(231, 76, 60, 0.1);
-    --toastify-border-radius: 12px;
-    --toastify-font-family: inherit;
-    --toastify-z-index: 9999;
-    --toastify-spinner-color: #3498db;
-    --toastify-spinner-color-empty-area: rgba(255, 255, 255, 0.1);
-    --toastify-color-progress-light: linear-gradient(to right, #3498db, #2ecc71);
-    --toastify-color-progress-dark: linear-gradient(to right, #3498db, #2ecc71);
-    --toastify-color-progress-info: linear-gradient(to right, #3498db, #2ecc71);
-    --toastify-color-progress-success: linear-gradient(to right, #3498db, #2ecc71);
-    --toastify-color-progress-warning: linear-gradient(to right, #3498db, #2ecc71);
-    --toastify-color-progress-error: linear-gradient(to right, #3498db, #2ecc71);
+const GlobalStyle = createGlobalStyle`
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  .Toastify__toast {
-    background: rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(10px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15) !important;
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
   }
 `;
 
 const AppContainer = styled.div`
-  min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  color: #fff;
-`;
-
-const MainContent = styled.main`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 60px; // 为底部导航留出空间
+  padding-top: 70px; // 为固定的Header留出空间
 
   @media (max-width: 768px) {
-    padding: 0 16px;
+    padding-top: 60px;
   }
 `;
 
-const App: React.FC = () => {
+const MainContent = styled.main`
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+`;
+
+const AppContent: React.FC = () => {
   const { isOpen, title, loading, closeTransaction } = useTransaction();
 
   return (
-    <HashRouter>
-      <ToastStyles />
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
+    <>
+      <GlobalStyle />
+      <AppContainer>
+        <Header />
+        <MainContent>
+          <AppRoutes />
+        </MainContent>
+        <BottomNav />
+      </AppContainer>
+      <TransactionModal
+        isOpen={isOpen}
+        title={title}
+        onClose={closeTransaction}
+        loading={loading}
       />
-      <Web3Provider>
-        <TransactionProvider>
-          <NotificationProvider>
-            <AppContainer>
-              <Header />
-              <MainContent>
-                <AppRoutes />
-              </MainContent>
-              <TransactionModal
-                isOpen={isOpen}
-                title={title}
-                onClose={closeTransaction}
-                loading={loading}
-              />
-            </AppContainer>
-          </NotificationProvider>
-        </TransactionProvider>
-      </Web3Provider>
-    </HashRouter>
+      <ToastContainer position="bottom-right" theme="dark" />
+    </>
   );
 };
 
-export default App; 
+export const App: React.FC = () => {
+  return (
+    <Router>
+      <LanguageProvider>
+        <Web3Provider>
+          <TransactionProvider>
+            <NotificationProvider>
+              <AppContent />
+            </NotificationProvider>
+          </TransactionProvider>
+        </Web3Provider>
+      </LanguageProvider>
+    </Router>
+  );
+}; 

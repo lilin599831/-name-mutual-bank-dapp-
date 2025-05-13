@@ -36,7 +36,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         ...prev,
         isVisible: false
       }));
-    }, 5000);
+    }, 1500);
   };
 
   return (

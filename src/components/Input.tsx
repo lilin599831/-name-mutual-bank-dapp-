@@ -23,14 +23,16 @@ const Label = styled.label`
   }
 `;
 
-const StyledInput = styled.input<{ hasError?: boolean }>`
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid ${props => props.hasError ? 'rgba(231, 76, 60, 0.3)' : 'rgba(255, 255, 255, 0.2)'};
+const StyledInput = styled.input<{ error?: string; fullWidth?: boolean }>`
   background: rgba(255, 255, 255, 0.1);
-  color: white;
+  border: 1px solid ${props => props.error ? '#e74c3c' : 'rgba(255, 255, 255, 0.2)'};
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #fff;
+  width: ${props => props.fullWidth ? '100%' : 'auto'};
   font-size: 16px;
-  transition: all 0.2s;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
 
   &:focus {
     outline: none;
@@ -39,12 +41,17 @@ const StyledInput = styled.input<{ hasError?: boolean }>`
   }
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   @media (max-width: 768px) {
-    padding: 10px;
-    font-size: 14px;
+    font-size: 16px; // 保持16px以避免iOS自动缩放
+    padding: 10px 14px;
   }
 `;
 
@@ -68,7 +75,8 @@ export const Input: React.FC<InputProps> = ({
     <InputContainer fullWidth={fullWidth}>
       {label && <Label>{label}</Label>}
       <StyledInput
-        hasError={!!error}
+        error={error}
+        fullWidth={fullWidth}
         {...props}
       />
       {error && <ErrorText>{error}</ErrorText>}
