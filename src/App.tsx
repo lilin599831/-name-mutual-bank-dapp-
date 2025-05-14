@@ -1,40 +1,45 @@
 import React from 'react';
-import { HashRouter as Router } from 'react-router-dom';
-import styled, { createGlobalStyle } from 'styled-components';
+import { BrowserRouter as Router, HashRouter } from 'react-router-dom';
+import { createGlobalStyle } from 'styled-components';
 import { Web3Provider } from './contexts/Web3Context';
+import { LanguageProvider } from './contexts/LanguageContext';
 import { TransactionProvider } from './contexts/TransactionContext';
 import { NotificationProvider } from './contexts/NotificationContext';
-import { LanguageProvider } from './contexts/LanguageContext';
-import { TransactionModal } from './components/TransactionModal';
-import { useTransaction } from './contexts/TransactionContext';
-import { AppRoutes } from './routes';
 import { Header } from './components/Header';
 import { BottomNav } from './components/BottomNav';
+import { AppRoutes } from './routes';
+import { TransactionModal } from './components/TransactionModal';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const GlobalStyle = createGlobalStyle`
-  * {
+  body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    min-height: 100vh;
+    width: 100vw;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d3436 100%);
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-
-  html, body {
-    width: 100%;
-    height: 100%;
-    background: #000000;
-    color: #ffffff;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    overflow-x: hidden;
   }
 
   #root {
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    padding-top: 70px;
+    box-sizing: border-box;
+
+    @media (max-width: 768px) {
+      padding-top: 60px;
+    }
+  }
+
+  * {
+    box-sizing: border-box;
   }
 
   a {
@@ -43,66 +48,51 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const AppContainer = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 60px; // 为底部导航留出空间
-  padding-top: 70px; // 为固定的Header留出空间
-
-  @media (max-width: 768px) {
-    padding-top: 60px;
-  }
-`;
-
-const MainContent = styled.main`
-  flex: 1;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  
-  @media (max-width: 768px) {
-    padding: 16px;
-  }
-`;
-
 const AppContent: React.FC = () => {
-  const { isOpen, title, loading, closeTransaction } = useTransaction();
-
   return (
     <>
       <GlobalStyle />
-      <AppContainer>
-        <Header />
-        <MainContent>
-          <AppRoutes />
-        </MainContent>
-        <BottomNav />
-      </AppContainer>
-      <TransactionModal
-        isOpen={isOpen}
-        title={title}
-        onClose={closeTransaction}
-        loading={loading}
-      />
+      <Header />
+      <AppRoutes />
+      <BottomNav />
       <ToastContainer position="bottom-right" theme="dark" />
     </>
   );
 };
 
-export const App: React.FC = () => {
+const App: React.FC = () => {
+  // 检测是否在钱包环境中
+  const isInWallet = /TokenPocket|MetaMask|imToken/i.test(navigator.userAgent);
+
   return (
-    <Router>
-      <LanguageProvider>
-        <Web3Provider>
-          <TransactionProvider>
-            <NotificationProvider>
-              <AppContent />
-            </NotificationProvider>
-          </TransactionProvider>
-        </Web3Provider>
-      </LanguageProvider>
-    </Router>
+    // 在钱包中使用 HashRouter，否则使用 BrowserRouter
+    isInWallet ? (
+      <HashRouter>
+        <LanguageProvider>
+          <Web3Provider>
+            <TransactionProvider>
+              <NotificationProvider>
+                <AppContent />
+              </NotificationProvider>
+            </TransactionProvider>
+          </Web3Provider>
+        </LanguageProvider>
+      </HashRouter>
+    ) : (
+      <Router>
+        <LanguageProvider>
+          <Web3Provider>
+            <TransactionProvider>
+              <NotificationProvider>
+                <AppContent />
+              </NotificationProvider>
+            </TransactionProvider>
+          </Web3Provider>
+        </LanguageProvider>
+      </Router>
+    )
   );
-}; 
+};
+
+export { App };
+export default App;

@@ -47,59 +47,39 @@ const AnimatedContainer = styled.div<{ animation: string }>`
 const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 20px;
   min-height: calc(100vh - 80px);
   width: 100%;
   box-sizing: border-box;
-  overflow-y: auto;
 
   @media (max-width: 768px) {
-    padding: 20px 16px;
+    padding: 16px;
   }
 `;
 
 const Card = styled.div`
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(52, 152, 219, 0.1);
   border-radius: 12px;
-  padding: 30px;
-  backdrop-filter: blur(10px);
+  padding: 20px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   width: 100%;
   box-sizing: border-box;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
 
   @media (max-width: 768px) {
-    padding: 20px;
-    margin: 0 auto 16px;
-    max-width: calc(100vw - 32px);
+    padding: 16px;
+    margin-bottom: 12px;
   }
 `;
 
 const ProfileHeader = styled.div`
   display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 30px;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
   width: 100%;
   box-sizing: border-box;
-
-  @media (max-width: 768px) {
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-`;
-
-const Avatar = styled.div`
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #3498db, #2ecc71);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 24px;
-  margin-right: 20px;
 `;
 
 const UserInfo = styled.div`
@@ -107,7 +87,7 @@ const UserInfo = styled.div`
 `;
 
 const Username = styled.h2`
-  color: #fff;
+  color: transparent;
   margin: 0;
   font-size: 24px;
   background: linear-gradient(135deg, #3498db, #2ecc71);
@@ -136,17 +116,20 @@ const StatsGrid = styled.div`
 `;
 
 const StatCard = styled.div`
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(52, 152, 219, 0.1);
   border-radius: 12px;
   padding: 24px;
   text-align: center;
   transition: all 0.3s ease;
   width: 100%;
   box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.1);
   
   &:hover {
     transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(52, 152, 219, 0.3);
   }
 
   @media (max-width: 768px) {
@@ -166,6 +149,12 @@ const StatValue = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
 `;
 
 const StatLabel = styled.div`
@@ -341,9 +330,6 @@ export const Profile: React.FC = () => {
           <AnimatedContainer animation="fadeIn">
             <Card>
               <ProfileHeader>
-                <Avatar>
-                  {account ? account.slice(2, 4).toUpperCase() : '?'}
-                </Avatar>
                 <UserInfo>
                   <Username>{t.user}</Username>
                   <WalletAddress>{t.walletAddress}: {shortAddress}</WalletAddress>

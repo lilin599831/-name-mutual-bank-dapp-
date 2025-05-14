@@ -3,27 +3,36 @@ import styled from 'styled-components';
 import { useWeb3 } from '../contexts/Web3Context';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const CardContainer = styled.div`
+const CardWrapper = styled.div`
+  width: 100%;
+  max-width: calc(100vw - 32px);
+  margin: 0 auto;
+  padding: 30px;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  border-radius: 24px;
-  padding: 30px;
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
-  box-sizing: border-box;
+  border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 
   @media (max-width: 768px) {
-    width: calc(100% - 40px);
     padding: 20px;
-    margin: 0 20px;
+    gap: 16px;
   }
+`;
+
+const Container = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  box-sizing: border-box;
 `;
 
 const Title = styled.h2`
@@ -96,12 +105,14 @@ export const ConnectWalletCard: React.FC = () => {
   const t = translations[language as keyof typeof translations];
 
   return (
-    <CardContainer>
-      <Title>{t.title}</Title>
-      <Description>{t.description}</Description>
-      <ConnectButton onClick={connect}>
-        {t.connectButton}
-      </ConnectButton>
-    </CardContainer>
+    <Container>
+      <CardWrapper>
+        <Title>{t.title}</Title>
+        <Description>{t.description}</Description>
+        <ConnectButton onClick={connect}>
+          {t.connectButton}
+        </ConnectButton>
+      </CardWrapper>
+    </Container>
   );
 }; 

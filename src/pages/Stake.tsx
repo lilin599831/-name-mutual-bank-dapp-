@@ -32,30 +32,29 @@ const GlobalStyle = createGlobalStyle`
 const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 20px;
   min-height: calc(100vh - 80px);
   width: 100%;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 20px 16px;
+    padding: 16px;
   }
 `;
 
 const Card = styled.div`
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(52, 152, 219, 0.1);
   border-radius: 12px;
-  padding: 30px;
-  backdrop-filter: blur(10px);
+  padding: 20px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   width: 100%;
   box-sizing: border-box;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
 
   @media (max-width: 768px) {
-    padding: 20px;
-    margin: 0 auto 16px;
-    max-width: calc(100vw - 32px);
+    padding: 16px;
+    margin-bottom: 12px;
   }
 `;
 
@@ -76,6 +75,11 @@ const Title = styled.h1`
   font-size: 28px;
   color: #fff;
   margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.95);
+  }
 `;
 
 const AddressDisplay = styled.div`
@@ -136,6 +140,7 @@ const InfoText = styled.p`
 
   @media (max-width: 768px) {
     font-size: 12px;
+    color: rgba(255, 255, 255, 0.9);
   }
 `;
 
@@ -145,34 +150,106 @@ const StakesList = styled.div`
   box-sizing: border-box;
 `;
 
-const StakeItem = styled.div`
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 10px;
+const StakeItem = styled.div<{ $active: boolean }>`
+  background: rgba(52, 152, 219, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.1);
+  opacity: ${props => props.$active ? 1 : 0.6};
 
   @media (max-width: 768px) {
-    padding: 12px;
-    margin-bottom: 8px;
-    flex-direction: column;
-    gap: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
   }
 `;
 
 const StakeInfo = styled.div`
   flex: 1;
+  margin-right: 20px;
+  color: rgba(255, 255, 255, 0.9);
+
+  @media (max-width: 768px) {
+    margin-right: 12px;
+    color: rgba(255, 255, 255, 0.95);
+  }
 `;
 
-const StakeAmount = styled.div`
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 5px;
+const StakeDataItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    gap: 8px;
+  }
+`;
+
+const StakeLabel = styled.div`
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 4px;
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+  }
+`;
+
+const StakeValue = styled.div<{ $primary?: boolean }>`
+  font-size: 14px;
+  color: ${props => props.$primary ? 'transparent' : 'rgba(255, 255, 255, 0.9)'};
+  font-weight: ${props => props.$primary ? 'bold' : 'normal'};
+  margin-bottom: 8px;
+  background: ${props => props.$primary ? 'linear-gradient(135deg, #3498db, #2ecc71)' : 'none'};
+  -webkit-background-clip: ${props => props.$primary ? 'text' : 'none'};
+  background-clip: ${props => props.$primary ? 'text' : 'none'};
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
+`;
+
+const UnstakeButton = styled.button`
+  background: linear-gradient(135deg, #3498db, #2ecc71);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  min-width: 80px;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    padding: 6px 12px;
+    font-size: 12px;
+    min-width: 70px;
+  }
+`;
+
+const WithdrawFee = styled.div`
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
 `;
 
 const StakeDetails = styled.div`
@@ -223,13 +300,26 @@ const CardWrapper = styled.div`
   z-index: 1001;
 `;
 
+const EmptyMessage = styled.p`
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  text-align: center;
+  margin: 20px 0;
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 16px 0;
+  }
+`;
+
 const translations = {
   zh: {
     title: '质押',
     connected: '已连接：',
     stake: '质押',
     withdraw: '赎回',
-    withdrawFee: '赎回手续费',
+    withdrawFee: '手续费',
     pendingRewards: '待领取收益',
     stakeRate: '质押利率',
     stakeTime: '质押时间',
@@ -274,14 +364,15 @@ const translations = {
     approving: '授权中...',
     staking: '质押中...',
     withdrawing: '赎回中...',
-    claiming: '领取中...'
+    claiming: '领取中...',
+    noActiveStakes: '没有活跃的质押订单'
   },
   en: {
     title: 'Stake',
     connected: 'Connected: ',
     stake: 'Stake',
     withdraw: 'Withdraw',
-    withdrawFee: 'Withdrawal Fee',
+    withdrawFee: 'Fee',
     pendingRewards: 'Pending Rewards',
     stakeRate: 'Stake Rate',
     stakeTime: 'Stake Time',
@@ -326,14 +417,15 @@ const translations = {
     approving: 'Approving...',
     staking: 'Staking...',
     withdrawing: 'Withdrawing...',
-    claiming: 'Claiming...'
+    claiming: 'Claiming...',
+    noActiveStakes: 'No active stakes'
   },
   ja: {
     title: 'ステーキング',
     connected: '接続済み：',
     stake: 'ステーク',
     withdraw: '引き出し',
-    withdrawFee: '引き出し手数料',
+    withdrawFee: '手数料',
     pendingRewards: '保留中の報酬',
     stakeRate: 'ステーク率',
     stakeTime: 'ステーク時間',
@@ -378,14 +470,15 @@ const translations = {
     approving: '承認中...',
     staking: 'ステーク中...',
     withdrawing: '引き出し中...',
-    claiming: '請求中...'
+    claiming: '請求中...',
+    noActiveStakes: 'アクティブなステークがありません'
   },
   ko: {
     title: '스테이킹',
     connected: '연결됨: ',
     stake: '스테이크',
     withdraw: '출금',
-    withdrawFee: '출금 수수료',
+    withdrawFee: '수수료',
     pendingRewards: '대기 중인 보상',
     stakeRate: '스테이크 비율',
     stakeTime: '스테이크 시간',
@@ -430,7 +523,8 @@ const translations = {
     approving: '승인 중...',
     staking: '스테이크 중...',
     withdrawing: '출금 중...',
-    claiming: '청구 중...'
+    claiming: '청구 중...',
+    noActiveStakes: '활성 스테이크가 없습니다'
   }
 };
 
@@ -446,16 +540,16 @@ export const Stake: React.FC = () => {
   const { language } = useLanguage();
   const t = translations[language as keyof typeof translations];
 
-  const validationRules: ValidationRules = {
-    amount: {
-      required: true,
-      pattern: /^\d+(\.\d{1,18})?$/,
-      min: 100,
+const validationRules: ValidationRules = {
+  amount: {
+    required: true,
+    pattern: /^\d+(\.\d{1,18})?$/,
+    min: 100,
       message: t.invalidAmount
-    },
-    referrer: {
-      required: false,
-      pattern: /^0x[a-fA-F0-9]{40}$/,
+  },
+  referrer: {
+    required: false,
+    pattern: /^0x[a-fA-F0-9]{40}$/,
       message: t.invalidReferrer
     }
   };
@@ -504,27 +598,27 @@ export const Stake: React.FC = () => {
   }, [account, getBalance]);
 
   useEffect(() => {
-    const checkReferrerStatus = async (address: string) => {
-      if (!address || !ethers.utils.isAddress(address)) {
-        setIsReferrerActive(false);
+  const checkReferrerStatus = async (address: string) => {
+    if (!address || !ethers.utils.isAddress(address)) {
+      setIsReferrerActive(false);
+      return;
+    }
+
+    try {
+      const contract = getContract();
+      if (!contract) {
         return;
       }
 
-      try {
-        const contract = getContract();
-        if (!contract) {
-          return;
-        }
-        
-        const userInfo = await contract.getUserInfo(address);
-        const stakes = await contract.getUserStakes(address);
-        const hasActiveStakes = stakes.some((stake: any) => stake.active);
-        
-        setIsReferrerActive(hasActiveStakes);
-      } catch (err) {
-        setIsReferrerActive(false);
-      }
-    };
+      const userInfo = await contract.getUserInfo(address);
+      const stakes = await contract.getUserStakes(address);
+      const hasActiveStakes = stakes.some((stake: any) => stake.active);
+      
+      setIsReferrerActive(hasActiveStakes);
+    } catch (err) {
+      setIsReferrerActive(false);
+    }
+  };
 
     if (referrerAddress) {
       checkReferrerStatus(referrerAddress);
@@ -533,7 +627,7 @@ export const Stake: React.FC = () => {
 
   const handleStake = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const validationErrors = validateForm({ amount, referrer: referrerAddress }, validationRules);
     setErrors(validationErrors);
 
@@ -601,14 +695,46 @@ export const Stake: React.FC = () => {
   const handleWithdraw = async (stakeIndex: number) => {
     setIsWithdrawing(stakeIndex);
     try {
+      // 获取合约实例
+      const contract = getContract();
+      if (!contract) {
+        showNotification('error', '合约实例获取失败');
+        return;
+      }
+
+      // 检查质押是否存在
+      const stake = stakes[stakeIndex];
+      if (!stake) {
+        showNotification('error', '质押订单不存在');
+        return;
+      }
+
+      // 检查质押状态
+      try {
+        const stakeInfo = await contract.stakes(account, stakeIndex);
+        if (!stakeInfo.active) {
+          showNotification('error', '该质押已经被赎回或不处于活跃状态');
+          return;
+        }
+      } catch (error) {
+        console.error('检查质押状态失败:', error);
+        showNotification('error', '检查质押状态失败');
+        return;
+      }
+
+      // 执行赎回操作
       const success = await withdraw(stakeIndex);
       if (success) {
         showNotification('success', t.withdrawSuccess);
-        refreshStakes();
+        // 刷新质押列表
+        await refreshStakes();
       }
     } catch (error: any) {
+      console.error('赎回失败:', error);
       if (error.code === 4001) {
         showNotification('error', t.userCancelWithdraw);
+      } else if (error.message.includes('Stake not active')) {
+        showNotification('error', '该质押已经被赎回或不处于活跃状态');
       } else {
         showNotification('error', error.message || t.withdrawFailed);
       }
@@ -670,7 +796,7 @@ export const Stake: React.FC = () => {
               placeholder={t.inputAmount}
               error={errors.amount}
               fullWidth
-              disabled={isStaking || isWithdrawing !== null || isClaiming}
+              disabled={isStaking}
             />
             {!hasReferrer && (
               <>
@@ -684,7 +810,7 @@ export const Stake: React.FC = () => {
                   placeholder={t.inputReferrer}
                   error={errors.referrer}
                   fullWidth
-                  disabled={isStaking || isWithdrawing !== null || isClaiming}
+                  disabled={isStaking}
                 />
                 {referrerAddress && (
                   <>
@@ -702,7 +828,7 @@ export const Stake: React.FC = () => {
                 type="submit"
                 variant="primary"
                 loading={isStaking}
-                disabled={isWithdrawing !== null || isClaiming}
+                disabled={isStaking}
                 fullWidth
               >
                 {isApproving ? t.approving : isStaking ? t.staking : t.stake}
@@ -720,7 +846,7 @@ export const Stake: React.FC = () => {
               variant="primary"
               onClick={handleClaimRewards}
               loading={isClaiming}
-              disabled={isStaking || isWithdrawing !== null}
+              disabled={isClaiming}
               fullWidth
             >
               {isClaiming ? t.claiming : t.claimAllRewards}
@@ -732,28 +858,41 @@ export const Stake: React.FC = () => {
           <Card>
             <Title>{t.myStakes}</Title>
             <StakesList>
-              {stakes.map((stake, index) => (
-                <StakeItem key={index}>
+              {stakes.filter(stake => stake.active).map((stake) => (
+                <StakeItem key={stake.index} $active={true}>
                   <StakeInfo>
-                    <StakeAmount>{formatTokenAmount(stake.amount)} {t.unit}</StakeAmount>
-                    <StakeDetails>
-                      <div>{t.stakeTime}: {new Date(stake.startTime * 1000).toLocaleString()}</div>
-                      <div>{t.stakeRate}: {stake.rate}%</div>
-                      <div>{t.pendingRewards}: {formatTokenAmount(stake.pendingRewards)} {t.unit}</div>
-                      <div>{t.withdrawFee}: {formatTokenAmount(stake.withdrawFee)} {t.unit}</div>
-                    </StakeDetails>
+                    <StakeDataItem>
+                      <StakeLabel>{t.stakeAmount}</StakeLabel>
+                      <StakeValue $primary>{formatTokenAmount(stake.amount)} {t.unit}</StakeValue>
+                    </StakeDataItem>
+                    <StakeDataItem>
+                      <StakeLabel>{t.stakeTime}</StakeLabel>
+                      <StakeValue>{new Date(stake.startTime * 1000).toLocaleString()}</StakeValue>
+                    </StakeDataItem>
+                    <StakeDataItem>
+                      <StakeLabel>{t.stakeRate}</StakeLabel>
+                      <StakeValue>{stake.rate}%</StakeValue>
+                    </StakeDataItem>
+                    <StakeDataItem>
+                      <StakeLabel>{t.pendingRewards}</StakeLabel>
+                      <StakeValue>{formatTokenAmount(stake.pendingRewards)} {t.unit}</StakeValue>
+                    </StakeDataItem>
+                    <StakeDataItem>
+                      <StakeLabel>{t.withdrawFee}</StakeLabel>
+                      <StakeValue>{formatTokenAmount(stake.withdrawFee)} {t.unit}</StakeValue>
+                    </StakeDataItem>
                   </StakeInfo>
-                  <WithdrawButton
-                    variant="primary"
-                    onClick={() => handleWithdraw(index)}
-                    loading={isWithdrawing === index}
-                    disabled={isStaking || isClaiming}
+                  <UnstakeButton
+                    onClick={() => handleWithdraw(stake.index)}
+                    disabled={isWithdrawing === stake.index || !stake.active}
                   >
-                    {isWithdrawing === index ? t.withdrawing : t.withdraw}
-                    <WithdrawInfo>{t.withdrawFee}: {formatTokenAmount(stake.withdrawFee)} {t.unit}</WithdrawInfo>
-                  </WithdrawButton>
+                    {isWithdrawing === stake.index ? t.withdrawing : t.withdraw}
+                  </UnstakeButton>
                 </StakeItem>
               ))}
+              {stakes.filter(stake => stake.active).length === 0 && (
+                <EmptyMessage>{t.noActiveStakes}</EmptyMessage>
+              )}
             </StakesList>
           </Card>
         )}
