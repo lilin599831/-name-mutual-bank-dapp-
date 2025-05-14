@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/-name-mutual-bank-dapp-/static/css/main.40df3699.css",
+    "main.js": "/-name-mutual-bank-dapp-/static/js/main.f27d999e.js",
+    "index.html": "/-name-mutual-bank-dapp-/index.html",
+    "main.40df3699.css.map": "/-name-mutual-bank-dapp-/static/css/main.40df3699.css.map",
+    "main.f27d999e.js.map": "/-name-mutual-bank-dapp-/static/js/main.f27d999e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.40df3699.css",
+    "static/js/main.f27d999e.js"
+  ]
+}
