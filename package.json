@@ -2,7 +2,7 @@
   "name": "mutual-bank-dapp",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://lilin599831.github.io/-name-mutual-bank-dapp-",
+  "homepage": "https://lilin599831.github.io/mutual-bank-dapp",
   "dependencies": {
     "@types/node": "^16.18.0",
     "@types/react": "^18.2.0",
