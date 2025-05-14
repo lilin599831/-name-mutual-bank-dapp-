@@ -103,10 +103,10 @@ export const useStaking = () => {
       while (retries > 0) {
         try {
           // 先检查质押状态
-          const stakeInfo = await contract.getUserStakeInfo(await contract.signer.getAddress(), stakeIndex);
-          console.log('质押信息:', stakeInfo);
+          const stakes = await contract.getUserStakes(await contract.signer.getAddress());
+          console.log('质押列表:', stakes);
           
-          if (!stakeInfo.active) {
+          if (!stakes[stakeIndex] || !stakes[stakeIndex].active) {
             throw new Error('质押不处于活跃状态');
           }
 
